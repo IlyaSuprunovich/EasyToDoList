@@ -9,7 +9,6 @@ namespace EasyToDoList
 {
     public class ApplicationContext : DbContext
     {
-       /*"Server=localhost;Port=5432;Database=ToDoList;User Id=postgres;Password=0405;"*/
         public ApplicationContext() : base(nameOrConnectionString: "DbConnection")
         {
 

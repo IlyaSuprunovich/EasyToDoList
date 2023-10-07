@@ -120,9 +120,9 @@ namespace EasyToDoList
 
         private System.Windows.Forms.Panel HeaderForName;
         private System.Windows.Forms.Label NameOfProject;
-        private System.Windows.Forms.TextBox InputNameToDo;
         private System.Windows.Forms.Button AddToDo;
-        private System.Windows.Forms.FlowLayoutPanel ArrayForToDoListItem;
+        public System.Windows.Forms.TextBox InputNameToDo;
+        public System.Windows.Forms.FlowLayoutPanel ArrayForToDoListItem;
         private System.Windows.Forms.Panel BodyForToDoListItem;
         private System.Windows.Forms.Label HeaderForToDoListItem;
         private System.Windows.Forms.CheckedListBox ListForTasks;

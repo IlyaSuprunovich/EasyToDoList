@@ -15,17 +15,19 @@ namespace EasyToDoList
         public CheckedListBox ListForTasks { get; set; }
         public TextBox InputNameOfTask { get; set; } 
         public Button AddTaskInToDoList { get; set; }
+        public List<TextBox> TaskTextBoxes { get; set; }
 
-        public CreateFormToDoList()
+
+        private Form1 _Form1 { get; set; }
+        
+
+        public CreateFormToDoList( Form1 form)
         {
-            /*this.BodyForToDoListItem = new Panel();
-            this.HeaderForToDoListItem = new Label();
-            this.ListForTasks = new CheckedListBox();
-            this.InputNameOfTask = new TextBox();
-            this.AddTaskInToDoList = new Button();*/
+            this._Form1 = form;
+            this.TaskTextBoxes = new List<TextBox>();   
         }
 
-        public void AddFormToDoList(string inputText, FlowLayoutPanel ArrayForToDoListItem, List<TextBox> taskTextBoxes)
+        public void AddFormToDoList(string inputText)
         {
             BodyForToDoListItem = new Panel();
             BodyForToDoListItem.Name = inputText + "Panel";
@@ -33,7 +35,7 @@ namespace EasyToDoList
             BodyForToDoListItem.Size = new Size(200, 330);
             BodyForToDoListItem.BackColor = ColorTranslator.FromHtml("#91C8E4");
             BodyForToDoListItem.Margin = new Padding(15, 40, 15, 0);
-            ArrayForToDoListItem.Controls.Add(BodyForToDoListItem);
+           _Form1.ArrayForToDoListItem.Controls.Add(BodyForToDoListItem);
 
             HeaderForToDoListItem = new Label();
             HeaderForToDoListItem.Name = inputText + "Label";
@@ -64,7 +66,7 @@ namespace EasyToDoList
             BodyForToDoListItem.Controls.Add(InputNameOfTask);
 
             InputNameOfTask.Tag = ListForTasks;
-            taskTextBoxes.Add(InputNameOfTask);
+            TaskTextBoxes.Add(InputNameOfTask);
 
             AddTaskInToDoList = new Button();
             AddTaskInToDoList.Name = inputText;
@@ -73,8 +75,32 @@ namespace EasyToDoList
             AddTaskInToDoList.BackColor = Color.White;
             AddTaskInToDoList.Text = "Add";
             AddTaskInToDoList.BackColor = ColorTranslator.FromHtml("#749BC2");
-           // AddTaskInToDoList.Click += AddTaskInToDoList_Click;
+            AddTaskInToDoList.Click += AddTaskInToDoList_Click;
             BodyForToDoListItem.Controls.Add(AddTaskInToDoList);
+        }
+
+        private void AddTaskInToDoList_Click(object sender, EventArgs e)
+        {
+            Button addButton = (Button)sender;
+
+            using (ApplicationContext context = new ApplicationContext())
+            {
+                ToDoList toDoList = context.ToDoLists.ToList().Find(x => x.Name == addButton.Name);
+                foreach (TextBox taskTextBox in TaskTextBoxes)
+                    if (taskTextBox.Text != String.Empty)
+                    {
+                        Task task = new Task()
+                        {
+                            Name = taskTextBox.Text,
+                            IdToDoList = toDoList.Id
+                        };
+                        context.Tasks.Add(task);
+                        context.SaveChanges();
+                        if (taskTextBox.Tag is ListBox listBox)
+                            listBox.Items.Add(taskTextBox.Text);
+                        taskTextBox.Text = "";
+                    }
+            }
         }
     }
 }

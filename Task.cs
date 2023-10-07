@@ -11,8 +11,7 @@ namespace EasyToDoList
         public int Id { get; set; }
         public int IdToDoList { get; set; }
         public string Name { get; set; }
-        public enum Priority { High, Middle, Low }
-
+       
         public virtual ToDoList ToDoList { get; set; }
     }
 }
